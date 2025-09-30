@@ -1,6 +1,6 @@
 # Makefile for simple Go API with profiling and benchmarks
 
-APP_NAME := simple-api
+APP_NAME := ./bin/simple-api
 CMD_DIR := ./cmd/server
 
 # Build the binary
