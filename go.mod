@@ -1,3 +1,3 @@
-module github.com/aliskhannn/api-profiler
+module github.com/aliskhannn/perf-http-api
 
 go 1.25.6
