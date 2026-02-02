@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	_ "net/http/pprof"
 	"os"
 	"time"
 
@@ -22,6 +23,15 @@ func main() {
 		Handler:           mux,
 		ReadHeaderTimeout: 5 * time.Second,
 	}
+
+	pprofAddr := env("PPROF_ADDR", "127.0.0.1:6060")
+
+	go func() {
+		log.Printf("pprof: http://%s/debug/pprof/\n", pprofAddr)
+		if err := http.ListenAndServe(pprofAddr, nil); err != nil {
+			log.Fatalf("pprof server: %v", err)
+		}
+	}()
 
 	log.Printf("api: http://%s\n", addr)
 	if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
