@@ -32,6 +32,10 @@ go.work.sum
 .idea/
 .vscode/
 
+# profiling artifacts
+*.pprof
+trace.out
+
 # benchmark outputs
 *.txt
 
