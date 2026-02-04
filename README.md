@@ -44,7 +44,7 @@ pprof/trace доступны через HTTP-эндпоинты `net/http/pprof`
 
 ### CPU profile (30s)
 
-Снять CPU-профиль на 30 секунд (параметр `seconds` поддерживается):
+Снять CPU-профиль на 30 секунд:
 
 ```bash
 curl 'http://127.0.0.1:6060/debug/pprof/profile?seconds=30' -o cpu.pprof
@@ -72,7 +72,7 @@ go tool pprof -http=:0 ./heap.pprof
 
 ### Trace (10s)
 
-Снять execution trace (параметр `seconds` поддерживается):
+Снять execution trace:
 
 ```bash
 curl 'http://127.0.0.1:6060/debug/pprof/trace?seconds=10' -o trace.out
@@ -84,9 +84,21 @@ curl 'http://127.0.0.1:6060/debug/pprof/trace?seconds=10' -o trace.out
 go tool trace trace.out
 ```
 
+## Trace analysis (что смотрел)
+
+Цель trace — убедиться, что сервер не “тормозит” из-за планировщика/GC/блокировок, и понять характер нагрузки (CPU-bound vs blocked).
+
+Как анализировал:
+- Открыл trace: `go tool trace trace.out`.
+- Посмотрел `Goroutines` / `Goroutine analysis`: нет подозрительных “зависших” горутин и нет лавинообразного роста их количества во время нагрузки.
+- Посмотрел `Network`/`Syscalls` (blocking): нет доминирующих долгих блокировок — основная работа это обработка запроса в хендлерах.
+- Посмотрел scheduler/GC (вклад в паузы): общий вывод — приложение в основном CPU-bound, и оптимизации логики/аллокаций дают прямой эффект.
+
+Вывод по trace: узкое место не в конкурентности, а в работе хендлеров (формирование ответа/кодирование JSON), поэтому оптимизации в `Sum` и `JSON` подтверждаются и бенчмарками.
+
 ## Benchmarks + benchstat
 
-`benchstat` делает статистическое A/B сравнение результатов бенчмарков (обычно “до/после”), и типичный сценарий — прогонять `go test -bench` с `-count=10` для обоих состояний.
+`benchstat` делает статистическое A/B сравнение результатов бенчмарков (обычно “до/после”), типичный сценарий — прогонять `go test -bench` с `-count=10` для обоих состояний.
 
 ### Run benchmarks
 
@@ -140,10 +152,11 @@ JSONHandler-4   21.00 ± 0%   14.00 ± 0%  -33.33% (p=0.000 n=10)
 geomean         21.00        16.31       -22.34%
 ```
 
-## What changed (high level)
+## What changed (по коммитам)
 
-- `Sum`: убран `fmt.Sprintf`, сборка JSON без форматтера (меньше CPU и allocs).
-- `JSON`: убран `map + json.Encoder`, возвращается статический JSON.
+- 8bc7b18 `perf(sum)`: убран `fmt.Sprintf`, ручная сборка JSON → меньше allocs/op и лучше sec/op.
+- d0b7859 `perf(json)`: убран `map + json.Encoder`, статический JSON → сильное ускорение и меньше аллокаций.
+- 87a2c39 `chore`: игнор артефактов бенчей/профилей.
 
 ## Commit history
 
