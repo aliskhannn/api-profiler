@@ -58,7 +58,7 @@ go tool pprof -http=:0 ./cpu.pprof
 
 ### Heap profile
 
-Снять heap профиль: [web:1]
+Снять heap профиль:
 
 ```bash
 curl 'http://127.0.0.1:6060/debug/pprof/heap' -o heap.pprof
