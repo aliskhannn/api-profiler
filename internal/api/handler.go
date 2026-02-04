@@ -1,7 +1,6 @@
 package api
 
 import (
-	"encoding/json"
 	"net/http"
 	"strconv"
 )
@@ -34,11 +33,10 @@ func (h *Handler) Sum(w http.ResponseWriter, r *http.Request) {
 	_, _ = w.Write(buf)
 }
 
+var jsonOK = []byte(`{"service":"api-profiler","ok":true}` + "\n")
+
 func (h *Handler) JSON(w http.ResponseWriter, r *http.Request) {
-	resp := map[string]any{
-		"service": "api-profiler",
-		"ok":      true,
-	}
 	w.Header().Set("Content-Type", "application/json")
-	_ = json.NewEncoder(w).Encode(resp)
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(jsonOK)
 }
