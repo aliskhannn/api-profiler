@@ -1,0 +1,18 @@
+?   	github.com/aliskhannn/api-profiler/cmd/api	[no test files]
+?   	github.com/aliskhannn/api-profiler/cmd/loadgen	[no test files]
+goos: linux
+goarch: amd64
+pkg: github.com/aliskhannn/api-profiler/internal/api
+cpu: Intel(R) Pentium(R) Gold 7505 @ 2.00GHz
+BenchmarkSumHandler-4   	  769333	      1522 ns/op	    1704 B/op	      19 allocs/op
+BenchmarkSumHandler-4   	  612589	      1907 ns/op	    1704 B/op	      19 allocs/op
+BenchmarkSumHandler-4   	  771286	      1473 ns/op	    1704 B/op	      19 allocs/op
+BenchmarkSumHandler-4   	  761401	      1876 ns/op	    1704 B/op	      19 allocs/op
+BenchmarkSumHandler-4   	  734088	      1508 ns/op	    1704 B/op	      19 allocs/op
+BenchmarkSumHandler-4   	  810996	      1928 ns/op	    1704 B/op	      19 allocs/op
+BenchmarkSumHandler-4   	  692560	      1448 ns/op	    1704 B/op	      19 allocs/op
+BenchmarkSumHandler-4   	  783091	      1486 ns/op	    1704 B/op	      19 allocs/op
+BenchmarkSumHandler-4   	  787774	      1623 ns/op	    1704 B/op	      19 allocs/op
+BenchmarkSumHandler-4   	  755595	      1970 ns/op	    1704 B/op	      19 allocs/op
+PASS
+ok  	github.com/aliskhannn/api-profiler/internal/api	13.340s

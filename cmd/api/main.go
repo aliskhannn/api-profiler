@@ -7,7 +7,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/aliskhannn/perf-http-api/internal/api"
+	"github.com/aliskhannn/api-profiler/internal/api"
 )
 
 func main() {
